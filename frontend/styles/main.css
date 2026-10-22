@@ -24,6 +24,9 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    .logo {
+                height: 70px;
+            }
     .nav-container {
         .nav {
             list-style: none;
@@ -36,8 +39,10 @@
                 text-decoration: none;
                 color: var(--color-white);
             }
+            
         }
     }
+    
 }
 [data-layout="footer"] {
     padding: var(--gap-around);
