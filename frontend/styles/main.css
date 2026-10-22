@@ -25,8 +25,10 @@
     justify-content: space-between;
     align-items: center;
     .logo {
-                height: 70px;
-            }
+        display: block;   /* entfernt einen kleinen Abstand unter dem Bild */
+        height: 70px;
+        width: auto;      /* Bild wird sicher nie verzerrt */
+    }
     .nav-container {
         .nav {
             list-style: none;
