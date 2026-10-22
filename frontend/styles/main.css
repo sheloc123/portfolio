@@ -44,8 +44,8 @@
             
         }
     }
-    
 }
+
 [data-layout="footer"] {
     padding: var(--gap-around);
     background-color: var(--color-accent);
@@ -63,6 +63,21 @@
             }
         }
     }
+    .socials {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-self: center;
+        gap: 6px;
+        .social-icon {
+            width: 20px;
+            height: 20px;
+            margin-bottom: 3px;
+        }
+        a {
+            text-decoration: none;
+        }
+    }    
 }
 
 /* Styling of all available page components. */
