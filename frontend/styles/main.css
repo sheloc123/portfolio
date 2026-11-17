@@ -486,6 +486,23 @@ input, textarea {
     .tile:hover {
         transform: translateY(-6px);
     }
+    /* all text boxes in a row get the same height, even with less text */
+    @supports (grid-template-rows: subgrid) {
+        .grid {
+            grid-auto-rows: minmax(250px, auto) auto;
+            row-gap: 0;
+        }
+        .tile {
+            min-height: 0;
+            grid-row: span 2;
+            display: grid;
+            grid-template-rows: subgrid;
+            margin-bottom: 24px;
+        }
+        .box {
+            grid-row: 2;
+        }
+    }
     .box {
         display: flex;
         flex-direction: column;
@@ -510,9 +527,14 @@ input, textarea {
     .text {
         font-size: 16px;
     }
-    .pattern--wellen-pink {
+    /* each box has a colour that stands out from its pattern */
+    .pattern--blumenkaro {
         color: var(--color-black);
         .box { background-color: var(--color-pink); }
+    }
+    .pattern--wellen-pink {
+        color: var(--color-olive-dark);
+        .box { background-color: var(--color-cream); }
     }
     .pattern--streifen {
         color: var(--color-cream);
