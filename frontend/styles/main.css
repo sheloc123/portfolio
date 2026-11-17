@@ -1446,7 +1446,41 @@ input, textarea {
 }
 
 /* BREAKPOINT: sm */
-@media (max-width: 640px) {}
+@media (max-width: 640px) {
+    /* phone: header in one small line. Startseite is hidden, the logo already leads home */
+    [data-layout="header"] {
+        padding: 10px;
+        flex-wrap: nowrap;
+        gap: 8px;
+        .logo { height: 22px; }
+        .logo-text { font-size: 18px; }
+        .nav-container {
+            min-width: 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+            .nav {
+                flex-wrap: nowrap;
+                gap: 8px;
+                white-space: nowrap;
+                a:not(.button) { padding: 6px 0; font-size: 11px; }
+            }
+        }
+        .nav-item:first-child { display: none; }
+        .button { padding: 5px 9px; font-size: 11px; }
+    }
+    /* phone: flower smaller and up beside the photo, so it does not cover the subtitle */
+    [data-module="hero-front"] {
+        min-height: 0;
+        .flower {
+            top: calc(56px + var(--name-size) * 1.6);
+            bottom: auto;
+            right: 3%;
+            width: 92px;
+            height: 92px;
+            .flower-text { font-size: 9px; strong { font-size: 10px; } }
+        }
+    }
+}
 
 /* BREAKPOINT: xs */
 @media (max-width: 425px) {}
