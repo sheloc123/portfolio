@@ -25,9 +25,9 @@ Container::make('theme_options', 'Globales')
     ->add_tab('Podcast', [
         Field::make('text', 'podcast_rss_feed', 'RSS Feed des Podcasts')
             ->set_default_value('https://anchor.fm/s/c809068c/podcast/rss')
-            ->set_help_text('Daraus kommt automatisch die neuste Folge. Findest du in Spotify for Creators unter Einstellungen > Verfügbarkeit.'),
+            ->set_help_text('Notlösung, falls Spotify nicht erreichbar ist. Normalerweise kommt die neuste Folge direkt von Spotify.'),
         Field::make('html', 'spotify_info', 'Info')
-            ->set_html('<p><strong>Optional, braucht Spotify Premium:</strong> Wenn die drei Felder unten ausgefüllt sind, kommt die neuste Folge direkt von Spotify und der Link führt zur Folge in Spotify. Sonst wird der RSS Feed oben verwendet.</p>'),
+            ->set_html('<p>Die neuste Folge kommt automatisch von Spotify, dafür reicht die Show ID. Client ID und Client Secret sind nicht nötig (nur optional, braucht Spotify Premium).</p>'),
         Field::make('text', 'spotify_show_id', 'Show ID')
             ->set_default_value('0ci3VzojV1j9065WeBU0vW')
             ->set_help_text('Der Teil nach /show/ im Spotify Link deines Podcasts'),

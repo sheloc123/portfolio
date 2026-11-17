@@ -94,12 +94,71 @@ function get_rss_latest_episode(): array|false {
 }
 
 /**
- * Neuste Folge: zuerst über Spotify (falls eingerichtet), sonst über den RSS Feed.
+ * Holt die neuste Folge von der öffentlichen Spotify Einbettungsseite des Podcasts.
+ * Braucht weder Zugangsdaten noch Premium, und der Link führt direkt zur Folge
+ * in Spotify. 3 Stunden zwischengespeichert.
+ */
+function get_spotify_embed_latest_episode(): array|false {
+   $show_id = trim((string) carbon_get_theme_option('spotify_show_id')) ?: '0ci3VzojV1j9065WeBU0vW';
+   $cache_key = 'spotify_embed_latest_' . md5($show_id);
+   $cached = get_transient($cache_key);
+   if ($cached !== false) {
+      return $cached;
+   }
+
+   $response = wp_remote_get('https://open.spotify.com/embed/show/' . rawurlencode($show_id), [
+      'timeout' => 8,
+      'headers' => ['Accept-Language' => 'de-CH,de;q=0.9'],
+   ]);
+   if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
+      return false;
+   }
+   $html = wp_remote_retrieve_body($response);
+
+   $title = '';
+   $episode_id = '';
+   // -> Die Seite enthält ihre Daten als JSON im Script «__NEXT_DATA__»
+   if (preg_match('#<script id="__NEXT_DATA__"[^>]*>(.*?)</script>#s', $html, $match)) {
+      $entity = json_decode($match[1], true)['props']['pageProps']['state']['data']['entity'] ?? [];
+      if (($entity['type'] ?? '') === 'episode') {
+         $title = $entity['name'] ?? '';
+         $episode_id = $entity['id'] ?? '';
+      }
+   }
+   // -> Falls Spotify den Aufbau ändert: erste Folgen ID irgendwo auf der Seite
+   if (!$episode_id && preg_match('#spotify:episode:([A-Za-z0-9]{22})#', $html, $match)) {
+      $episode_id = $match[1];
+   }
+   if (!$episode_id) {
+      return false;
+   }
+
+   $result = [
+      'title' => $title,
+      'link' => 'https://open.spotify.com/episode/' . $episode_id,
+   ];
+   set_transient($cache_key, $result, 3 * HOUR_IN_SECONDS);
+   return $result;
+}
+
+/**
+ * Neuste Folge, in dieser Reihenfolge:
+ * 1. Spotify API (nur wenn unter Globales > Podcast eingerichtet)
+ * 2. Spotify Einbettungsseite (Link direkt zur Folge in Spotify)
+ * 3. RSS Feed (Notlösung, Link zu Spotify for Creators)
+ * Fehlt bei Spotify der Titel, kommt er aus dem RSS Feed.
  * Titel wie «93 - Ausbrecherkönig» werden zu «Folge 93 · Ausbrecherkönig».
  */
 function get_latest_episode(): array|false {
-   $episode = get_spotify_latest_episode() ?: get_rss_latest_episode();
+   $episode = get_spotify_latest_episode() ?: get_spotify_embed_latest_episode();
+   if ($episode && empty($episode['title'])) {
+      $rss = get_rss_latest_episode();
+      $episode['title'] = $rss['title'] ?? '';
+   }
    if (!$episode) {
+      $episode = get_rss_latest_episode();
+   }
+   if (!$episode || empty($episode['title'])) {
       return false;
    }
    $episode['title'] = preg_replace('/^(\d+)\s*[-–:]\s*/u', 'Folge $1 · ', $episode['title']);
