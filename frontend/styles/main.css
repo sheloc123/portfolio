@@ -246,8 +246,7 @@ body {
 /* Start page: big name, cut out photo in front, pink flower link. */
 [data-module="hero-front"] {
     background-color: var(--color-black);
-    min-height: 860px;
-    padding: 56px 24px 0;
+    padding: 56px 24px 48px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -273,18 +272,16 @@ body {
         position: relative;
         z-index: 2;
         display: block;
-        /* the photo covers the lower half of the name */
-        margin-top: calc(var(--name-size) * -0.45);
+        /* the head covers most of the letters */
+        margin-top: calc(var(--name-size) * -0.8);
         width: min(420px, 80vw);
         height: auto;
     }
     .subtitle {
-        position: absolute;
+        /* sits right where the dress meets the black background */
+        position: relative;
         z-index: 3;
-        left: 50%;
-        bottom: 40px;
-        transform: translateX(-50%);
-        margin: 0;
+        margin: -100px 0 0;
         padding: 8px 24px;
         border-radius: 999px;
         background-color: var(--color-black);
