@@ -5,79 +5,208 @@
 :root {
     /* colors */
     --color-white: #ffffff;
-    --color-black: #000000;
-    --color-accent: #696d48;
+    --color-black: #0d0d0d;
+    --color-cream: #f5f1ea;
+    --color-pink: #ffb1d9;
+    --color-pink-light: #ffd9ec;
+    --color-olive: #696d48;
+    --color-olive-dark: #3f4229;
+    --color-green-light: #e3e5cc;
+    --color-accent: var(--color-olive);
     /* gaps & sizes */
     --gap-around: 40px;
+    --gap-side: clamp(20px, 4vw, 48px);
+    --container: 1280px;
+    --radius: 28px;
     /* fonts */
-    --font-h1: normal 64px/120% serif;
+    --font-display: 'Bagel Fat One', sans-serif;
+    --font-serif: 'Instrument Serif', serif;
+    --font-text: 'DM Sans', sans-serif;
+    --font-h1: normal 64px/120% var(--font-display);
+}
+
+body {
+    margin: 0;
+    background-color: var(--color-black);
+    color: var(--color-cream);
+    font-family: var(--font-text);
+}
+
+/* Patterns: each page has its own pattern, also used on the tiles of the start page. */
+.pattern--blumenkaro {
+    background: var(--color-cream) url('../assets/patterns/blumenkaro-dezent.svg') 0 0 / 72px 72px repeat;
+}
+.pattern--wellen-pink {
+    background: var(--color-pink) url('../assets/patterns/wellen-podcast-pink.svg') 0% 50% / cover no-repeat;
+}
+.pattern--picknick {
+    background:
+        linear-gradient(90deg, rgba(255, 177, 217, 0.55) 50%, transparent 0) 0 0 / 48px 48px,
+        linear-gradient(rgba(255, 177, 217, 0.55) 50%, transparent 0) 0 0 / 48px 48px,
+        var(--color-cream);
+}
+.pattern--streifen {
+    background: repeating-linear-gradient(90deg, var(--color-olive) 0 36px, #5d6140 36px 72px);
+}
+
+/* Buttons, can be used anywhere. */
+.button {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.button--pink {
+    background-color: var(--color-pink);
+    color: var(--color-black);
 }
 
 /* Styling of all available layout components. */
 [data-layout="header"] {
-    padding: var(--gap-around);
-    background-color: var(--color-accent);
+    padding: 20px var(--gap-side);
+    background-color: var(--color-black);
     position: sticky;
     top: 0;
     z-index: 100;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    gap: 16px 32px;
+    .logo-link {
+        text-decoration: none;
+    }
     .logo {
-        display: block;   /* entfernt einen kleinen Abstand unter dem Bild */
-        height: 70px;
-        width: auto;      /* Bild wird sicher nie verzerrt */
+        display: block;
+        height: 56px;
+        width: auto;
+    }
+    .logo-text {
+        font-family: var(--font-display);
+        font-size: 28px;
+        color: var(--color-pink);
     }
     .nav-container {
         .nav {
             list-style: none;
+            margin: 0;
+            padding: 0;
             display: flex;
+            flex-wrap: wrap;
             flex-direction: row;
             justify-content: flex-end;
-            align-self: center;
-            gap: 20px;
-            a {
+            align-items: center;
+            gap: 8px 28px;
+            a:not(.button) {
+                display: inline-block;
+                padding: 12px 0;
                 text-decoration: none;
-                color: var(--color-white);
+                font-weight: 500;
+                color: var(--color-cream);
             }
-            
+            a:not(.button):hover {
+                color: var(--color-pink);
+            }
         }
     }
 }
 
 [data-layout="footer"] {
-    padding: var(--gap-around);
-    background-color: var(--color-accent);
-.nav-container {
-        .nav {
-            list-style: none;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
-            align-self: center;
-            gap: 20px;
-            a {
-                text-decoration: none;
-                color: var(--color-white);
-            }
+    background-color: var(--color-black);
+    color: var(--color-cream);
+    .stripes {
+        height: 28px;
+        background: repeating-linear-gradient(90deg, var(--color-pink) 0 28px, var(--color-olive) 28px 56px);
+    }
+    .container {
+        max-width: var(--container);
+        margin: 0 auto;
+        padding: 72px var(--gap-side) 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+    }
+    .cta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        .cta-title {
+            margin: 0;
+            max-width: 860px;
+            font-family: var(--font-display);
+            font-weight: 400;
+            font-size: clamp(48px, 7vw, 104px);
+            line-height: 0.95;
+            color: var(--color-pink);
+        }
+        .button {
+            padding: 16px 28px;
+            font-size: 17px;
+        }
+    }
+    .info {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        .name {
+            font-family: var(--font-display);
+            font-size: 28px;
+            color: var(--color-cream);
+            text-decoration: none;
+        }
+        .tagline {
+            margin: 6px 0 0;
         }
     }
     .socials {
         display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
-        align-self: center;
-        gap: 6px;
-        .social-icon {
-            width: 20px;
-            height: 20px;
-            margin-bottom: 3px;
-        }
+        flex-wrap: wrap;
+        gap: 12px;
         a {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background-color: var(--color-pink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-black);
             text-decoration: none;
+            font-size: 12px;
         }
-    }    
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            /* icons are white in the backend, this turns them black on the pink circle */
+            filter: brightness(0);
+        }
+    }
+    .bottom {
+        border-top: 1px solid rgba(245, 241, 234, 0.3);
+        padding-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 14px;
+        .nav {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 20px;
+            a {
+                color: var(--color-cream);
+            }
+        }
+    }
 }
 
 /* Styling of all available page components. */
@@ -113,6 +242,251 @@
     }
 }
 
+/* Start page: big name, cut out photo in front, pink flower link. */
+[data-module="hero-front"] {
+    background-color: var(--color-black);
+    min-height: 860px;
+    padding: 56px 24px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .name {
+        position: relative;
+        z-index: 1;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: var(--font-display);
+        font-weight: 400;
+        font-size: clamp(88px, 15vw, 224px);
+        line-height: 0.86;
+        color: var(--color-pink);
+        text-align: center;
+    }
+    .portrait {
+        position: relative;
+        z-index: 2;
+        display: block;
+        margin-top: -170px;
+        width: min(420px, 80vw);
+        height: auto;
+    }
+    .subtitle {
+        position: absolute;
+        z-index: 3;
+        left: 50%;
+        bottom: 40px;
+        transform: translateX(-50%);
+        margin: 0;
+        padding: 8px 24px;
+        border-radius: 999px;
+        background-color: var(--color-black);
+        font-family: var(--font-serif);
+        font-style: italic;
+        font-size: clamp(22px, 2.6vw, 34px);
+        text-align: center;
+        white-space: nowrap;
+    }
+    .flower {
+        position: absolute;
+        z-index: 4;
+        right: 5%;
+        top: 470px;
+        width: 170px;
+        height: 170px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        text-decoration: none;
+        color: var(--color-black);
+        transition: transform 0.3s ease;
+        .flower-shape {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            fill: var(--color-pink);
+            transform: rotate(-12deg);
+        }
+        .flower-text {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.1;
+            strong {
+                font-family: var(--font-display);
+                font-weight: 400;
+                font-size: 13px;
+            }
+        }
+    }
+    .flower:hover {
+        transform: rotate(10deg) scale(1.05);
+    }
+}
+
+/* Start page: text box on black and white waves, two polaroids at the bottom corners. */
+[data-module="intro-text"] {
+    background: var(--color-black) url('../assets/patterns/wellen-zebra.svg') center / cover no-repeat;
+    padding: 120px 0 300px;
+    .inner {
+        position: relative;
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 var(--gap-side);
+    }
+    .box {
+        position: relative;
+        z-index: 1;
+        background-color: var(--color-black);
+        border: 3px solid var(--color-pink);
+        border-radius: 32px;
+        padding: clamp(28px, 4vw, 56px) clamp(28px, 4vw, 56px) 120px;
+        text-align: center;
+    }
+    .text {
+        margin: 0;
+        font-family: var(--font-serif);
+        font-size: clamp(30px, 3.2vw, 44px);
+        line-height: 1.2;
+    }
+    .polaroid {
+        position: absolute;
+        z-index: 2;
+        margin: 0;
+        width: 240px;
+        padding: 14px 14px 52px;
+        background-color: var(--color-white);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+        img {
+            display: block;
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+        }
+    }
+    .polaroid--left {
+        left: -40px;
+        bottom: -230px;
+        transform: rotate(-6deg);
+    }
+    .polaroid--right {
+        right: -40px;
+        bottom: -215px;
+        transform: rotate(5deg);
+    }
+}
+
+/* Start page: bar with the newest podcast episode. */
+[data-module="latest-episode"] {
+    background-color: var(--color-black);
+    padding: 40px var(--gap-side) 0;
+    .bar {
+        max-width: var(--container);
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 20px 32px;
+        padding: 24px 28px;
+        border-radius: 24px;
+        background-color: #1b1b1b;
+        color: var(--color-cream);
+        text-decoration: none;
+    }
+    .play {
+        width: 56px;
+        height: 56px;
+        flex: 0 0 auto;
+        circle { fill: var(--color-pink); }
+        path { fill: var(--color-black); }
+    }
+    .info {
+        flex: 1 1 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .label {
+        font-size: 13px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--color-pink);
+    }
+    .title {
+        font-family: var(--font-display);
+        font-size: 26px;
+    }
+    .link-text {
+        font-weight: 700;
+    }
+}
+
+/* Start page: four big tiles, each in the pattern of its page. */
+[data-module="tiles"] {
+    background-color: var(--color-black);
+    padding: 28px var(--gap-side) 120px;
+    .grid {
+        max-width: var(--container);
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 24px;
+    }
+    .tile {
+        min-height: 420px;
+        border-radius: var(--radius);
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        text-decoration: none;
+        color: var(--color-olive-dark);
+        transition: transform 0.3s ease;
+    }
+    .tile:hover {
+        transform: translateY(-6px);
+    }
+    .box {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 20px;
+        border-radius: 20px;
+        background-color: var(--color-cream);
+    }
+    .label {
+        font-size: 14px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+    .title {
+        font-family: var(--font-display);
+        font-size: 38px;
+        line-height: 0.95;
+        overflow-wrap: anywhere;
+    }
+    .text {
+        font-size: 16px;
+    }
+    .pattern--wellen-pink {
+        color: var(--color-black);
+        .box { background-color: var(--color-pink); }
+    }
+    .pattern--streifen {
+        color: var(--color-cream);
+        .box { background-color: var(--color-olive-dark); }
+        .title { color: var(--color-pink); font-size: 34px; }
+    }
+}
+
 /* Styling of all available teaser components. */
 
 /* Styling of utility classes, can be added anywhere in the project. */
@@ -124,10 +498,39 @@
 @media (max-width: 1280px) {}
 
 /* BREAKPOINT: lg */
-@media (max-width: 1024px) {}
+@media (max-width: 1024px) {
+    [data-module="hero-front"] {
+        .flower {
+            top: auto;
+            bottom: 110px;
+            width: 130px;
+            height: 130px;
+        }
+    }
+}
 
 /* BREAKPOINT: md */
-@media (max-width: 768px) {}
+@media (max-width: 768px) {
+    [data-module="hero-front"] {
+        min-height: 640px;
+        .portrait { margin-top: -80px; }
+        .subtitle { white-space: normal; width: 80%; }
+    }
+    [data-module="intro-text"] {
+        padding-bottom: 120px;
+        .box { padding-bottom: clamp(28px, 4vw, 56px); }
+        .polaroid {
+            position: relative;
+            display: inline-block;
+            width: 44%;
+            left: auto;
+            right: auto;
+            bottom: auto;
+            margin-top: -30px;
+            img { height: 180px; }
+        }
+    }
+}
 
 /* BREAKPOINT: sm */
 @media (max-width: 640px) {}
