@@ -38,9 +38,10 @@ function get_spotify_latest_episode(): array|false {
       return false;
    }
 
-   // -> 2. Die neuste Folge abfragen (Spotify liefert die neuste zuerst)
+   // -> 2. Den Podcast abfragen, er enthält die Folgen (die neuste zuerst).
+   //       GET /shows/{id} ist auch nach den Spotify Änderungen 2026 erlaubt.
    $episodes_response = wp_remote_get(
-      'https://api.spotify.com/v1/shows/' . rawurlencode($show_id) . '/episodes?market=CH&limit=1',
+      'https://api.spotify.com/v1/shows/' . rawurlencode($show_id) . '?market=CH',
       [
          'headers' => ['Authorization' => 'Bearer ' . $token],
          'timeout' => 8,
@@ -49,7 +50,7 @@ function get_spotify_latest_episode(): array|false {
    if (is_wp_error($episodes_response) || wp_remote_retrieve_response_code($episodes_response) !== 200) {
       return false;
    }
-   $episode = json_decode(wp_remote_retrieve_body($episodes_response), true)['items'][0] ?? null;
+   $episode = json_decode(wp_remote_retrieve_body($episodes_response), true)['episodes']['items'][0] ?? null;
    if (!$episode || empty($episode['external_urls']['spotify'])) {
       return false;
    }
