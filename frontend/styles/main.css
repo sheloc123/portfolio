@@ -170,22 +170,22 @@ body {
         flex-wrap: wrap;
         gap: 12px;
         a {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background-color: var(--color-pink);
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--color-black);
+            color: var(--color-cream);
             text-decoration: none;
             font-size: 12px;
+            transition: transform 0.2s ease;
+        }
+        a:hover {
+            transform: scale(1.12);
         }
         .social-icon {
-            width: 24px;
-            height: 24px;
-            /* icons are white in the backend, this turns them black on the pink circle */
-            filter: brightness(0);
+            width: 30px;
+            height: 30px;
         }
     }
     .bottom {
