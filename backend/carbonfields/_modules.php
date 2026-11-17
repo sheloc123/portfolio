@@ -35,7 +35,7 @@ Container::make('post_meta', 'Module')
             // -> latest_episode: Balken mit der neusten Podcastfolge
             ->add_fields('latest_episode', 'Neuste Folge', [
                 Field::make('html', 'latest_episode_info', 'Info')
-                    ->set_html('<p>Ist unter Globales &gt; Spotify alles ausgefüllt, kommt die neuste Folge automatisch von Spotify. Die Felder Folge und Link werden nur gebraucht, falls Spotify nicht erreichbar ist.</p>'),
+                    ->set_html('<p>Die neuste Folge kommt automatisch aus dem RSS Feed (Globales &gt; Podcast). Die Felder Folge und Link werden nur gebraucht, falls Spotify nicht erreichbar ist.</p>'),
                 Field::make('text', 'label', 'Kleiner Titel')->set_default_value('Neuste Folge'),
                 Field::make('text', 'title', 'Folge (Ersatz)'),
                 Field::make('text', 'link', 'Link zur Folge (Ersatz)'),
@@ -82,10 +82,10 @@ function render_modules (): void {
                 break;
             case 'latest_episode':
                 // -> neuste Folge automatisch von Spotify, sonst die Angaben von Hand
-                $spotify = get_spotify_latest_episode();
-                if ($spotify) {
-                    $module['title'] = $spotify['title'];
-                    $module['link'] = $spotify['link'];
+                $latest = get_latest_episode();
+                if ($latest) {
+                    $module['title'] = $latest['title'];
+                    $module['link'] = $latest['link'];
                 }
                 if (empty($module['title'])) {
                     continue 2; // nichts anzeigen, wenn es keine Folge gibt

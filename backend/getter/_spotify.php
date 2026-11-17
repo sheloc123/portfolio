@@ -62,3 +62,46 @@ function get_spotify_latest_episode(): array|false {
    set_transient($cache_key, $result, 6 * HOUR_IN_SECONDS);
    return $result;
 }
+
+/**
+ * Holt die neuste Folge aus dem RSS Feed des Podcasts (Spotify for Creators).
+ * Braucht keine Zugangsdaten und kein Premium. Der Link führt zur Folge auf
+ * Spotify for Creators, von dort kann man sie direkt anhören.
+ * WordPress speichert den Feed zwischen, hier für 3 Stunden.
+ */
+function get_rss_latest_episode(): array|false {
+   $feed_url = trim((string) carbon_get_theme_option('podcast_rss_feed'))
+      ?: 'https://anchor.fm/s/c809068c/podcast/rss';
+
+   include_once ABSPATH . WPINC . '/feed.php';
+   $set_lifetime = fn() => 3 * HOUR_IN_SECONDS;
+   add_filter('wp_feed_cache_transient_lifetime', $set_lifetime);
+   $feed = fetch_feed($feed_url);
+   remove_filter('wp_feed_cache_transient_lifetime', $set_lifetime);
+
+   if (is_wp_error($feed)) {
+      return false;
+   }
+   $item = $feed->get_item(0); // die neuste Folge steht zuoberst
+   if (!$item) {
+      return false;
+   }
+
+   return [
+      'title' => html_entity_decode($item->get_title(), ENT_QUOTES),
+      'link' => $item->get_permalink(),
+   ];
+}
+
+/**
+ * Neuste Folge: zuerst über Spotify (falls eingerichtet), sonst über den RSS Feed.
+ * Titel wie «93 - Ausbrecherkönig» werden zu «Folge 93 · Ausbrecherkönig».
+ */
+function get_latest_episode(): array|false {
+   $episode = get_spotify_latest_episode() ?: get_rss_latest_episode();
+   if (!$episode) {
+      return false;
+   }
+   $episode['title'] = preg_replace('/^(\d+)\s*[-–:]\s*/u', 'Folge $1 · ', $episode['title']);
+   return $episode;
+}
