@@ -35,6 +35,14 @@ Container::make('theme_options', 'Globales')
         Field::make('text', 'spotify_client_secret', 'Client Secret')
             ->set_attribute('type', 'password'),
     ])
+    ->add_tab('Zusammenarbeit', [
+        Field::make('text', 'media_kit_link', 'Link zum Media Kit')
+            ->set_help_text('Wird bei allen Buttons «Media Kit ansehen» verwendet'),
+        Field::make('text', 'contact_email', 'Mailadresse für Anfragen')
+            ->set_help_text('Hierhin werden die Anfragen aus dem Kontaktformular geschickt. Leer lassen: die Mailadresse von WordPress wird verwendet.'),
+        Field::make('checkbox', 'contact_email_show', 'Mailadresse auf der Seite anzeigen')
+            ->set_option_value('yes'),
+    ])
     ->add_tab('Socials', [
         Field::make('complex', 'socials', 'Socials')
             ->add_fields([

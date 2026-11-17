@@ -12,4 +12,5 @@
 
 require_once __DIR__ . '/_globals.php';
 require_once __DIR__ . '/_spotify.php';
+require_once __DIR__ . '/_content.php';
 // require_once __DIR__ . '/_getter.php';
