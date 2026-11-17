@@ -30,6 +30,18 @@ body {
     background-color: var(--color-black);
     color: var(--color-cream);
     font-family: var(--font-text);
+    /* little pink flower instead of the normal arrow */
+    cursor: url('../assets/cursor-flower.svg') 14 14, url('../assets/cursor-flower.png') 14 14, auto;
+}
+
+/* on links and buttons the flower turns green */
+a, button, select, label, [role="button"] {
+    cursor: url('../assets/cursor-flower-hover.svg') 16 16, url('../assets/cursor-flower-hover.png') 16 16, pointer;
+}
+
+/* in text fields the normal text cursor stays, so typing feels normal */
+input, textarea {
+    cursor: text;
 }
 
 /* Patterns: each page has its own pattern, also used on the tiles of the start page. */
@@ -373,6 +385,22 @@ body {
             /* always portrait, also when the polaroid gets smaller */
             aspect-ratio: 4 / 5;
             object-fit: cover;
+        }
+        /* little handwritten looking note on the white part of the polaroid */
+        figcaption {
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            bottom: 10px;
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: 24px;
+            line-height: 1.1;
+            color: var(--color-olive-dark);
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
     .polaroid--left {

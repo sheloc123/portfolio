@@ -27,13 +27,18 @@ Container::make('post_meta', 'Module')
             ->add_fields('intro_text', 'Intro Text mit Polaroids', [
                 Field::make('textarea', 'text', 'Text')->set_required(),
                 Field::make('image', 'image_left', 'Polaroid links'),
+                Field::make('text', 'caption_left', 'Notiz unter Polaroid links')
+                    ->set_help_text('Ganz kurz, zum Beispiel ein Stichwort'),
                 Field::make('image', 'image_right', 'Polaroid rechts'),
+                Field::make('text', 'caption_right', 'Notiz unter Polaroid rechts'),
             ])
             // -> latest_episode: Balken mit der neusten Podcastfolge
             ->add_fields('latest_episode', 'Neuste Folge', [
+                Field::make('html', 'latest_episode_info', 'Info')
+                    ->set_html('<p>Ist unter Globales &gt; Spotify alles ausgefüllt, kommt die neuste Folge automatisch von Spotify. Die Felder Folge und Link werden nur gebraucht, falls Spotify nicht erreichbar ist.</p>'),
                 Field::make('text', 'label', 'Kleiner Titel')->set_default_value('Neuste Folge'),
-                Field::make('text', 'title', 'Folge')->set_required(),
-                Field::make('text', 'link', 'Link zur Folge'),
+                Field::make('text', 'title', 'Folge (Ersatz)'),
+                Field::make('text', 'link', 'Link zur Folge (Ersatz)'),
                 Field::make('text', 'link_text', 'Link Text')->set_default_value('Jetzt hören'),
             ])
             // -> tiles: grosse Kacheln, jede im Muster ihrer Seite
@@ -74,6 +79,17 @@ function render_modules (): void {
                 break;
             case 'hero_front':
                 $module['image'] = $module['image'] ? get_media_by_id($module['image'], 'l') : false;
+                break;
+            case 'latest_episode':
+                // -> neuste Folge automatisch von Spotify, sonst die Angaben von Hand
+                $spotify = get_spotify_latest_episode();
+                if ($spotify) {
+                    $module['title'] = $spotify['title'];
+                    $module['link'] = $spotify['link'];
+                }
+                if (empty($module['title'])) {
+                    continue 2; // nichts anzeigen, wenn es keine Folge gibt
+                }
                 break;
             case 'intro_text':
                 $module['image_left'] = $module['image_left'] ? get_media_by_id($module['image_left'], 's') : false;

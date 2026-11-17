@@ -22,6 +22,16 @@ Container::make('theme_options', 'Globales')
         Field::make('text', 'footer_tagline', 'Kurzer Satz unter dem Namen')
             ->set_default_value('Podcasterin, Moderatorin und Creatorin. Vor und hinter der Kamera.'),
     ])
+    ->add_tab('Spotify', [
+        Field::make('html', 'spotify_info', 'Info')
+            ->set_html('<p>Wenn diese drei Felder ausgefüllt sind, zeigt das Modul «Neuste Folge» automatisch die neuste Folge von Spotify an. Die Angaben findest du auf developer.spotify.com unter deiner App.</p>'),
+        Field::make('text', 'spotify_show_id', 'Show ID')
+            ->set_default_value('0ci3VzojV1j9065WeBU0vW')
+            ->set_help_text('Der Teil nach /show/ im Spotify Link deines Podcasts'),
+        Field::make('text', 'spotify_client_id', 'Client ID'),
+        Field::make('text', 'spotify_client_secret', 'Client Secret')
+            ->set_attribute('type', 'password'),
+    ])
     ->add_tab('Socials', [
         Field::make('complex', 'socials', 'Socials')
             ->add_fields([
