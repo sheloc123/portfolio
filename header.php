@@ -6,7 +6,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Instrument+Serif:ital@0;1&display=swap">
-    <link rel="stylesheet" href="<?= get_template_directory_uri() ?>/frontend/styles/main.css">
+    <?php // ?v= changes whenever main.css changes, so browsers always load the newest version ?>
+    <link rel="stylesheet" href="<?= get_template_directory_uri() ?>/frontend/styles/main.css?v=<?= filemtime(get_template_directory() . '/frontend/styles/main.css') ?>">
     <title><?php bloginfo('name') ?></title>
     <?php wp_head(); ?>
 </head>
