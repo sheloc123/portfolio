@@ -151,10 +151,16 @@ function get_projects_by_category(): array {
    return $groups;
 }
 
-// -> Button «Media Kit ansehen» ohne Link bekommt den Media Kit Link aus Globales
+// -> Link zum Media Kit: aus Globales > Zusammenarbeit, sonst der Link vom Management
+const MEDIA_KIT_DEFAULT = 'https://app.yannik-tschan.workers.dev/media/sheryn-locher';
+function get_media_kit_link(): string {
+   return trim((string) carbon_get_theme_option('media_kit_link')) ?: MEDIA_KIT_DEFAULT;
+}
+
+// -> Button «Media Kit ansehen» ohne Link bekommt den Media Kit Link
 function media_kit_fallback(string $text, string $link): string {
    if (!$link && stripos($text, 'media kit') !== false) {
-      return (string) carbon_get_theme_option('media_kit_link');
+      return get_media_kit_link();
    }
    return $link;
 }
