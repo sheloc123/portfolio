@@ -144,7 +144,11 @@ function get_projects_by_category(): array {
             'meta' => carbon_get_post_meta($post->ID, 'project_meta'),
             'status' => carbon_get_post_meta($post->ID, 'project_status'),
             'link' => carbon_get_post_meta($post->ID, 'project_link'),
-            'image' => get_optional_image(carbon_get_post_meta($post->ID, 'project_image')),
+            'link_text' => carbon_get_post_meta($post->ID, 'project_link_text') ?: 'Ansehen',
+            'link_2' => carbon_get_post_meta($post->ID, 'project_link_2'),
+            'link_2_text' => carbon_get_post_meta($post->ID, 'project_link_2_text') ?: 'Webseite',
+            'image' => get_optional_image(carbon_get_post_meta($post->ID, 'project_image'))
+               ?: get_link_thumbnail((string) carbon_get_post_meta($post->ID, 'project_link'), get_the_title($post)),
          ], $posts),
       ];
    }
@@ -157,4 +161,32 @@ function media_kit_fallback(string $text, string $link): string {
       return (string) carbon_get_theme_option('media_kit_link');
    }
    return $link;
+}
+
+/**
+ * Vorschaubild für einen YouTube oder Spotify Link, wenn kein eigenes Bild da ist.
+ * YouTube: direkt über die Video ID. Spotify: über den öffentlichen oEmbed Dienst,
+ * eine Woche zwischengespeichert.
+ */
+function get_link_thumbnail(string $link, string $alt = ''): array|false {
+   if (!$link) {
+      return false;
+   }
+   if (preg_match('#(?:youtu\.be/|youtube\.com/(?:watch\?v=|embed/|shorts/))([A-Za-z0-9_-]{11})#', $link, $match)) {
+      return ['src' => 'https://i.ytimg.com/vi/' . $match[1] . '/hqdefault.jpg', 'alt' => $alt, 'type' => 'image'];
+   }
+   if (str_contains($link, 'open.spotify.com/')) {
+      $cache_key = 'link_thumb_' . md5($link);
+      $src = get_transient($cache_key);
+      if ($src === false) {
+         $response = wp_remote_get('https://open.spotify.com/oembed?url=' . rawurlencode($link), ['timeout' => 6]);
+         $src = '';
+         if (!is_wp_error($response) && wp_remote_retrieve_response_code($response) === 200) {
+            $src = json_decode(wp_remote_retrieve_body($response), true)['thumbnail_url'] ?? '';
+         }
+         set_transient($cache_key, $src, $src ? WEEK_IN_SECONDS : HOUR_IN_SECONDS);
+      }
+      return $src ? ['src' => $src, 'alt' => $alt, 'type' => 'image'] : false;
+   }
+   return false;
 }

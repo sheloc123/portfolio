@@ -1204,6 +1204,22 @@ input, textarea {
     }
     .project-title { font-family: var(--font-display); font-size: 26px; line-height: 1.05; }
     .project-meta { font-size: 15px; color: var(--color-olive-dark); }
+    .project-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+        a {
+            background: var(--color-olive-dark);
+            color: var(--color-cream);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        a:hover { background: var(--color-pink); color: var(--color-black); }
+    }
 }
 
 /* Seitenkopf mit Video (Zusammenarbeit) */
