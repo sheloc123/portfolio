@@ -164,8 +164,8 @@ function media_kit_fallback(string $text, string $link): string {
 }
 
 /**
- * Vorschaubild für einen YouTube oder Spotify Link, wenn kein eigenes Bild da ist.
- * YouTube: direkt über die Video ID. Spotify: über den öffentlichen oEmbed Dienst,
+ * Vorschaubild für einen YouTube, Vimeo oder Spotify Link, wenn kein eigenes Bild da ist.
+ * YouTube: direkt über die Video ID. Vimeo und Spotify: über den öffentlichen oEmbed Dienst,
  * eine Woche zwischengespeichert.
  */
 function get_link_thumbnail(string $link, string $alt = ''): array|false {
@@ -175,11 +175,14 @@ function get_link_thumbnail(string $link, string $alt = ''): array|false {
    if (preg_match('#(?:youtu\.be/|youtube\.com/(?:watch\?v=|embed/|shorts/))([A-Za-z0-9_-]{11})#', $link, $match)) {
       return ['src' => 'https://i.ytimg.com/vi/' . $match[1] . '/hqdefault.jpg', 'alt' => $alt, 'type' => 'image'];
    }
-   if (str_contains($link, 'open.spotify.com/')) {
+   if (str_contains($link, 'open.spotify.com/') || str_contains($link, 'vimeo.com/')) {
+      $oembed = str_contains($link, 'vimeo.com/')
+         ? 'https://vimeo.com/api/oembed.json?width=640&url='
+         : 'https://open.spotify.com/oembed?url=';
       $cache_key = 'link_thumb_' . md5($link);
       $src = get_transient($cache_key);
       if ($src === false) {
-         $response = wp_remote_get('https://open.spotify.com/oembed?url=' . rawurlencode($link), ['timeout' => 6]);
+         $response = wp_remote_get($oembed . rawurlencode($link), ['timeout' => 6]);
          $src = '';
          if (!is_wp_error($response) && wp_remote_retrieve_response_code($response) === 200) {
             $src = json_decode(wp_remote_retrieve_body($response), true)['thumbnail_url'] ?? '';

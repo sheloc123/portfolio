@@ -13,7 +13,7 @@ Container::make('post_meta', 'Angaben zum Projekt')
         Field::make('text', 'project_status', 'Status (optional)')
             ->set_help_text('Kleines pinkes Schild, zum Beispiel: bald online, in Produktion'),
         Field::make('text', 'project_link', 'Link (optional)')
-            ->set_help_text('Zum Beispiel der Link zum Film auf YouTube, Vimeo oder Spotify. Ohne eigenes Bild wird bei YouTube und Spotify automatisch das Vorschaubild verwendet.')
+            ->set_help_text('Zum Beispiel der Link zum Film auf YouTube, Vimeo oder Spotify. Ohne eigenes Bild wird bei YouTube, Vimeo und Spotify automatisch das Vorschaubild verwendet.')
             ->set_width(50),
         Field::make('text', 'project_link_text', 'Text zum Link')
             ->set_default_value('Ansehen')
