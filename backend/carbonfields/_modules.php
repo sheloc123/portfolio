@@ -399,7 +399,7 @@ function render_modules (): void {
                 $module['items'] = get_partners();
                 break;
             case 'contact':
-                $module['media_kit'] = get_media_kit_link();
+                $module['media_kit'] = carbon_get_theme_option('media_kit_link');
                 $module['email'] = carbon_get_theme_option('contact_email_show') ? carbon_get_theme_option('contact_email') : '';
                 break;
                 // todo: add data modifications for modules here as a new case

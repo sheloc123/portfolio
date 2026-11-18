@@ -37,7 +37,6 @@ Container::make('theme_options', 'Globales')
     ])
     ->add_tab('Zusammenarbeit', [
         Field::make('text', 'media_kit_link', 'Link zum Media Kit')
-            ->set_default_value('https://app.yannik-tschan.workers.dev/media/sheryn-locher')
             ->set_help_text('Wird bei allen Buttons «Media Kit ansehen» verwendet'),
         Field::make('text', 'contact_email', 'Mailadresse für Anfragen')
             ->set_help_text('Hierhin werden die Anfragen aus dem Kontaktformular geschickt. Leer lassen: die Mailadresse von WordPress wird verwendet.'),
